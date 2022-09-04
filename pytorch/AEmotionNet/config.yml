@@ -1,0 +1,93 @@
+dataset:
+  train:
+    data_root: D:\AVER\OMGEmotionChallenge-master\omg_TrainVideos\preproc/frames #D:\AVER\AFEW-VA\crop
+    file_list: D:\AVER\OMGEmotionChallenge-master\omg_TrainVideos\preproc/train_data_with_landmarks.txt
+  valid:
+    data_root: D:\AVER\OMGEmotionChallenge-master\omg_ValidVideos\preproc/frames #D:\AVER\AFEW-VA\crop
+    file_list: D:\AVER\OMGEmotionChallenge-master\omg_ValidVideos\preproc/valid_data_with_landmarks.txt #D:\AVER\AFEW-VA\crop/test_data_with_landmarks.txt
+
+seed: 1234
+
+net:
+  type: STPNet
+  depth: 18
+  softmax_size: 2
+  fine_tune: no
+
+parser:
+  max_num_clips: 0
+  max_num_samples: 1
+
+preproc:
+  audio:
+    type: mel
+    max_wave_value: 32768
+    sampling_rate: 22050
+    sfft:
+      filter_length: 1024
+      hop_length: 256
+      win_length: 1024
+    mel:
+      n_mel_channels: 80
+      mel_fmin: 0
+      mel_fmax: None
+
+sampler:
+  samples_is_randomize: no
+  step_size_for_samples: 2
+
+train_batcher:
+  batch: 32 #batch size
+  queue_size: 5
+  disk_reader_process_num: 1
+
+valid_batcher:
+  batch: 32 #batch size
+  queue_size: 5
+  disk_reader_process_num: 1
+
+batch_proc:
+  use_pin_memory: yes
+  use_async: yes
+
+opt:
+  type: SGD
+  lr: 0.009 #initial learning rate
+  momentum: 0.2
+  weight_decay: 5.e-4 #initial weight decay
+
+lr_scheduler:
+  type: SGDR
+  gamma: 0.01
+  use_linear_decay: yes
+  scale_lr: [1., 1]
+  scale_lr_fc: [1., 1]
+
+train:
+  cuda_device: 0 #cuda device id
+  step_size: 100 #lr scheduler step size
+  step_print: 10
+  epoch_size: 50000 #epoch size
+  max_iter: 10000000 #maximum iteration for training
+  validate_iter: 100
+  snapshot_iter: 10000 #snapshot model frequency
+  experiment_name: 'EmoV2_step4' #name for current experiment
+
+losses:
+  MSE:
+    w: 1.
+
+ini_net: /AlexNet_CombinedMargin_5/AlexNet_CombinedMargin_5_15000.model
+
+logging:
+  log_dir: D:/aver_log
+  tb_log_dir: D:/aver_log
+  snapshot_dir: D:/aver_log
+
+test:
+  dataset:
+    data_root: D:\AVER\AFEW-VA\crop
+    test_file_list: D:\AVER\AFEW-VA\crop/test_data_with_landmarks.txt
+
+  cuda_device: 0
+  file_model: D:\aver_log\EmoV2_step40/EmoV2_step40_iter_25000.model

@@ -1,0 +1,31 @@
+# ipynb
+.ipynb_checkpoints
+*.ipynb
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*egg-info
+*.py[cod]
+*.pyc[cod]
+*.orig
+*.bak
+*.rar
+*.zip
+*.tar
+*.dat
+**/temp/
+**/_jit/
+**/_logging/
+**/experiments/
+**/cfg/
+**/*.pkl
+**/*.pth
+*.sif
+*.simg/
+tmp_overlay/
+
+# PyCharm
+.idea
+
+# Logs
+*.log
